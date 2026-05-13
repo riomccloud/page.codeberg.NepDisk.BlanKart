@@ -1,0 +1,215 @@
+app-id: page.codeberg.NepDisk.BlanKart
+runtime: org.freedesktop.Platform
+runtime-version: '25.08'
+sdk: org.freedesktop.Sdk
+command: blankart.sh
+finish-args:
+  - --share=ipc
+  - --share=network
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --socket=wayland
+  - --device=all
+  - --persist=.srb2kart-v2
+  - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  - --filesystem=xdg-run/discord-ipc-0
+
+add-extensions:
+  com.valvesoftware.Steam.Utility.gamescope:
+    version: stable
+    add-ld-path: lib
+    no-autodownload: true
+    autodelete: true
+    directory: utils/gamescope
+
+cleanup-commands:
+  - mkdir -p /app/utils/gamescope
+
+modules:
+  - shared-modules/glu/glu-9.json
+
+  - name: game-music-emu
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_INSTALL_LIBDIR=lib
+      - -DBUILD_SHARED_LIBS=ON
+    cleanup:
+      - /lib/*.a
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://github.com/libgme/game-music-emu/archive/refs/tags/0.6.5.tar.gz
+        sha256: 8531678502451c2cf04248cda45c8b4645e19fcfb63e6a7ec2549641c47bb392
+        x-checker-data:
+          type: anitya
+          project-id: 866
+          stable-only: true
+          url-template: https://github.com/libgme/game-music-emu/archive/refs/tags/$version.tar.gz
+
+  - name: rapidjson
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DRAPIDJSON_BUILD_DOC=OFF
+      - -DRAPIDJSON_BUILD_EXAMPLES=OFF
+      - -DRAPIDJSON_BUILD_TESTS=OFF
+      - -DRAPIDJSON_BUILD_THIRDPARTY_GTEST=OFF
+    cleanup:
+      - /include
+      - /lib/cmake
+      - /lib/pkgconfig
+      - /share/doc
+    sources:
+      - type: git
+        url: https://github.com/Tencent/rapidjson
+        commit: 24b5e7a8b27f42fa16b96fc70aade9106cf7102f
+    # RapidJSON doesn't make new releases or tags since 2016
+    # Therefore, I will need to use the latest commit, and
+    # it seems I cannot monitor it with Flathub's External Data Checker
+    #
+    #    x-checker-data:
+    #      type: anitya
+    #      project-id: 7422
+    #      stable-only: true
+    #      url-template: https://github.com/Tencent/rapidjson/archive/refs/tags/v$version.tar.gz
+
+  - name: discord-rpc
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DBUILD_SHARED_LIBS=ON
+      - -DBUILD_EXAMPLES=OFF
+    cleanup:
+      - /include
+    sources:
+      - type: git
+        url: https://github.com/harmonytf/discord-rpc.git
+        commit: deedb52ce511728458641783cb6d80c7bbdde38c
+
+  - name: libopenmpt
+    config-opts:
+      - --disable-examples
+      - --disable-openmpt123
+      - --disable-static
+      - --disable-tests
+      - --without-portaudio
+      - --without-portaudiocpp
+    cleanup:
+      - /lib/*.la
+      - /share/doc
+    sources:
+      - type: archive
+        url: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-0.8.6+release.autotools.tar.gz
+        sha256: caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b
+        x-checker-data:
+          type: anitya
+          project-id: 141468
+          stable-only: true
+          url-template: https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-$version+release.autotools.tar.gz
+
+  - name: miniupnpc
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DUPNPC_BUILD_STATIC=OFF
+      - -DUPNPC_BUILD_SHARED=ON
+      - -DUPNPC_BUILD_TESTS=OFF
+      - -DUPNPC_BUILD_SAMPLE=OFF
+    sources:
+      - url: https://miniupnp.tuxfamily.org/files/miniupnpc-2.3.3.tar.gz
+        sha256: d52a0afa614ad6c088cc9ddff1ae7d29c8c595ac5fdd321170a05f41e634bd1a
+        x-checker-data:
+          type: anitya
+          project-id: 1986
+          stable-only: true
+          url-template: https://miniupnp.tuxfamily.org/files/miniupnpc-$version.tar.gz
+        type: archive
+    cleanup:
+      - /share/man
+      - /lib/pkgconfig
+      - /lib/libminiupnpc.so
+      - /lib/cmake
+      - /include
+      - /bin/external-ip.sh
+
+  - name: blankart
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      env:
+        CPM_SOURCE_CACHE: /run/build/blankart/.cache/CPM
+    config-opts:
+      - -DOPENMPT_INCLUDE_DIR=/app/include/libopenmpt
+      - -DBLANKART_EXE_NAME=blankart
+      - -DSRB2_CONFIG_ENABLE_DISCORDRPC=ON
+      - -DSRB2_CONFIG_ENABLE_TESTS=OFF
+    post-install:
+      - install -D -m 755 bin/blankart $FLATPAK_DEST/bin/blankart
+      - install -D -m 644 ../srb2.png $FLATPAK_DEST/share/icons/hicolor/256x256/apps/$FLATPAK_ID.png
+      - install -D -m 644 ../src/sdl/srb2icon.png $FLATPAK_DEST/share/icons/hicolor/64x64/apps/$FLATPAK_ID.png
+      - install -D -m 755 ../blankart.sh $FLATPAK_DEST/bin/blankart.sh
+      - install -D -m 644 -t $FLATPAK_DEST/share/applications ../page.codeberg.NepDisk.BlanKart.desktop
+      - install -D -m 644 -t $FLATPAK_DEST/share/metainfo ../$FLATPAK_ID.metainfo.xml
+    sources:
+      - type: file
+        url: https://github.com/cpm-cmake/CPM.cmake/releases/download/v0.42.0/CPM.cmake
+        sha256: 2020b4fc42dba44817983e06342e682ecfc3d2f484a581f11cc5731fbe4dce8a
+        dest: .cache/CPM/cpm
+        dest-filename: CPM_0.42.0.cmake
+      - type: git
+        url: https://github.com/TheLartians/ccache.cmake.git
+        commit: 639f153a960f04407618a68d4dc68c9e6c3cd10d
+        dest: .cache/CPM/ccache.cmake/7a26
+      - type: git
+        url: https://codeberg.org/NepDisk/blankart.git
+        commit: d3b482c103338210340bd06a38aab41ba7768867
+      - type: file
+        path: blankart.sh
+      - type: file
+        path: page.codeberg.NepDisk.BlanKart.desktop
+      - type: file
+        path: page.codeberg.NepDisk.BlanKart.metainfo.xml
+
+  - name: zopfli
+    buildsystem: cmake-ninja
+    config-opts:
+      - -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+    sources:
+      - type: git
+        url: https://github.com/google/zopfli.git
+        commit: bd64b2f0553d4f1ef4e6627647c5d9fc8c71ffc0
+
+  - name: xxhash
+    no-autogen: true
+    make-install-args:
+      - PREFIX=/app
+    sources:
+      - type: git
+        url: https://github.com/Cyan4973/xxHash.git
+        tag: v0.8.3
+        x-checker-data:
+          type: anitya
+          project-id: 17583
+          stable-only: true
+          tag-template: v${version}
+
+  - name: blankart-assets
+    buildsystem: simple
+    build-commands:
+      - install -t $FLATPAK_DEST/bin apply_extra
+      - bash buildall.sh
+      - install -Dt $FLATPAK_DEST/share/blankart-assets/ out/*
+    sources:
+      - type: extra-data
+        filename: srb2kart-assets.zip
+        url: https://github.com/STJr/Kart-Public/releases/download/v1.6/AssetsLinuxOnly.zip
+        sha256: 7a384fb99d42f0cf41d12e3ed873754f9a5ba2b993d5e54bde7962bea3accdd1
+        size: 220991971
+      - type: git
+        url: https://codeberg.org/NepDisk/blankart-assets.git
+        commit: 79a23d752b0821f2da17fe5e4a696dffa6a932e6
+      - type: script
+        commands:
+          - unzip srb2kart-assets.zip *.kart srb2.srb mdls* > /dev/null
+          - cp /app/share/blankart-assets/* .
+          - rm -rf srb2kart-assets.zip
+        dest-filename: apply_extra

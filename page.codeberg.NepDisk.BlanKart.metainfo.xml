@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Copyright 2023 Flathub maintainers -->
+<component type="desktop-application">
+  <id>page.codeberg.NepDisk.BlanKart</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>BlanKart</name>
+  <summary>Fork of SRB2Kart v2 adding many features</summary>
+  <description>
+    <p>
+      A fork of SRB2Kart v2 that offers multiple new features, game modes and improvements.
+    </p>
+  </description>
+  <launchable type="desktop-id">page.codeberg.NepDisk.BlanKart.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://wiki.srb2.org/w/images/a/ac/Srb2kart_title.png</image>
+      <caption>Title screen</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://codeberg.org/NepDisk/blankart</url>
+  <url type="bugtracker">https://codeberg.org/NepDisk/blankart/issues</url>
+  <url type="vcs-browser">https://codeberg.org/NepDisk/blankart</url>
+  <developer_name>BlanKart contributors</developer_name>
+  <provides>
+    <binary>blankart</binary>
+  </provides>
+  <releases>
+    <release version="1.0" date="2026-05-12">
+      <description>
+        <p>The complete changelog can be found on the build's Codeberg repository.</p>
+      </description>
+      <url>https://codeberg.org/NepDisk/blankart/releases/tag/1.0</url>
+    </release>
+  </releases>
+  <categories>
+    <category>Game</category>
+    <category>SportsGame</category>
+  </categories>
+  <recommends>
+    <control>keyboard</control>
+    <control>gamepad</control>
+  </recommends>
+  <content_rating type="oars-1.1">
+    <content_attribute id="violence-cartoon">moderate</content_attribute>
+    <content_attribute id="language-humor">mild</content_attribute>
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">mild</content_attribute>
+  </content_rating>
+  <keywords>
+    <keyword>doom</keyword>
+    <keyword>multiplayer</keyword>
+    <keyword>racing</keyword>
+  </keywords>
+</component>
