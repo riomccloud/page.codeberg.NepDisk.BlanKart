@@ -195,21 +195,15 @@ modules:
   - name: blankart-assets
     buildsystem: simple
     build-commands:
-      - install -t $FLATPAK_DEST/bin apply_extra
       - bash buildall.sh
-      - install -Dt $FLATPAK_DEST/share/blankart-assets/ out/*
+      - cp srb2kart-assets/*.kart srb2kart-assets/srb2.srb out/
+      - cp -r srb2kart-assets/mdls* out/
+      - install -Dt $FLATPAK_DEST/assets/ out/*
     sources:
-      - type: extra-data
-        filename: srb2kart-assets.zip
+      - type: archive
+        dest: srb2kart-assets
         url: https://github.com/STJr/Kart-Public/releases/download/v1.6/AssetsLinuxOnly.zip
         sha256: 7a384fb99d42f0cf41d12e3ed873754f9a5ba2b993d5e54bde7962bea3accdd1
-        size: 220991971
       - type: git
         url: https://codeberg.org/NepDisk/blankart-assets.git
         commit: 79a23d752b0821f2da17fe5e4a696dffa6a932e6
-      - type: script
-        commands:
-          - unzip srb2kart-assets.zip *.kart srb2.srb mdls* > /dev/null
-          - cp /app/share/blankart-assets/* .
-          - rm -rf srb2kart-assets.zip
-        dest-filename: apply_extra

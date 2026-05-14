@@ -5,13 +5,13 @@ for i in {0..9}; do
 done
 
 if [[ -z $(find ~/.srb2kart-v2 -name bonuschars.kart) ]]; then
-	ln -s /app/extra/bonuschars.kart ~/.srb2kart-v2/bonuschars.kart
+	ln -s /app/assets/bonuschars.kart ~/.srb2kart-v2/bonuschars.kart
 fi
 
 export PATH="/app/utils/gamescope/bin:$PATH"
 
 if [[ -z "$SRB2WADDIR" ]]; then
-	export SRB2WADDIR=/app/extra
+	export SRB2WADDIR=/app/assets
 fi
 
 if [ -z "$GAMESCOPE_ARGS" ]; then
