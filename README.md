@@ -28,5 +28,5 @@ flatpak install --user blankart.flatpak
 To build manually (especially to play the game on other architectures like AARCH64), clone the repo and run the following command:
 
 ```
-flatpak build-bundle repo blankart2.flatpak page.codeberg.NepDisk.BlanKart --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
+flatpak build-bundle repo blankart.flatpak page.codeberg.NepDisk.BlanKart --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo
 ```
