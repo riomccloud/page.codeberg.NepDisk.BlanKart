@@ -1,0 +1,8 @@
+--- a/cmake/Modules/GitUtilities.cmake
++++ b/cmake/Modules/GitUtilities.cmake
+@@ -30,4 +30,4 @@ function(git_current_branch variable)
+ function(git_latest_commit variable)
+-	_git_easy_command(rev-parse --short HEAD)
++	_git_easy_command(rev-parse --short=8 HEAD)
+ endfunction()
+ function(git_working_tree_dirty variable)
