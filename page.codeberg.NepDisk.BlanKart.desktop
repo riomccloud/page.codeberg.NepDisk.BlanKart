@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=BlanKart
-Comment=A kart racing fork based on the 3D Sonic the Hedgehog fangame Sonic Robo Blast 2
+Comment=SRB2Kart v2 Indev mod that adds new features, improvements and aims for the original gameplay
 TryExec=blankart.sh
 Exec=blankart.sh
 Icon=page.codeberg.NepDisk.BlanKart
