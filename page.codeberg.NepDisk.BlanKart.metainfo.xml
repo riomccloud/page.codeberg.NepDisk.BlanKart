@@ -8,7 +8,7 @@
   <summary>Fork of SRB2Kart v2 adding many features</summary>
   <description>
     <p>
-      A fork of SRB2Kart v2 that offers multiple new features, game modes and improvements.
+      A modification of SRB2Kart v2 Indev to make it closer to SRB2Kart gameplay while adding new features, and techincal improvements.
     </p>
   </description>
   <launchable type="desktop-id">page.codeberg.NepDisk.BlanKart.desktop</launchable>
@@ -26,11 +26,11 @@
     <binary>blankart</binary>
   </provides>
   <releases>
-    <release version="1.0" date="2026-05-12">
+    <release version="devtest-07.1.1" date="2026-05-05">
       <description>
         <p>The complete changelog can be found on the build's Codeberg repository.</p>
       </description>
-      <url>https://codeberg.org/NepDisk/blankart/releases/tag/1.0</url>
+      <url>https://codeberg.org/NepDisk/blankart/releases/tag/devtest-07.1.1</url>
     </release>
   </releases>
   <categories>
